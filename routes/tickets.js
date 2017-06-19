@@ -1,6 +1,7 @@
 var express = require('express');
 var request = require('request');
 var routes = express.Router();
+var token
 
 var auth = {
     url : 'https://autocollectapi.cmpayments.com/v1.0/token',
@@ -16,7 +17,34 @@ routes.post('/ticketBestellen', function(req, res) {
     request(auth, function(err, res, data) {  
         var result = JSON.parse(data);
         token = result.access_token;
-        console.log(token)
+//        console.log(token)
+        var debitor = {
+            url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': 'bearer' + token
+            },
+            body: '[{"reference": "' + debitor_reference + '", "phone_number": "' + phone_number + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
+        }
+
+        request(debitor, function(err, res, data){
+            //response verwerken
+            
+            var checkout ={
+                url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/check-outs',
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization': 'bearer' + token
+                },
+                body: ''
+            }
+
+            request(checkout, function(err, res, data){
+                //response
+            })
+        });
     });
 });
 

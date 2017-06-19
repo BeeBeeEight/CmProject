@@ -11,7 +11,7 @@ app.all('*', function(request, response, next) {
 })
 
 app.use('/auth', require('./routes/auth'));
-app.use('/tickets', require('./routes/tickets'));
+//app.use('/tickets', require('./routes/tickets'));
 
 
 app.all('*', function(request, response) {

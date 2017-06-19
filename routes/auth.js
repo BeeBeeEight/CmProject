@@ -17,7 +17,7 @@ var auth = {
 };
 
 
-/*
+
 request(auth, function(err, res, data) {  
     var result = JSON.parse(data);
     token = result.access_token;
@@ -36,5 +36,5 @@ request(auth, function(err, res, data) {
         console.log(result);
     });
 });
-*/
+
 module.exports = router;
