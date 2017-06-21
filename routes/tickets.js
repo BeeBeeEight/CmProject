@@ -1,6 +1,8 @@
 var express = require('express');
 var request = require('request');
 var routes = express.Router();
+
+
 var token
 var debitor
 
@@ -14,7 +16,7 @@ var auth = {
     body: 'grant_type=password&username=Avans1ApiUser&password=59bf8b536a0802561c8be4e3fd1b300847f5549d190499670921a3e40467d707'
 };
 
-routes.post('/ticketBestellen', function(req, res) {
+routes.post('/ticketBestellen', function(req, response) {
     request(auth, function(err, res, data) {  
         var result = JSON.parse(data);
         token = result.access_token;
@@ -33,10 +35,14 @@ routes.post('/ticketBestellen', function(req, res) {
             body: '[{"reference": "' + debitor_reference + '", "phone_number": "' + phone_number + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
         }
         console.dir(debitor);
+        response.status(200).json({
+            "token":token,
+            "debitor":debitor
+        });
+           
         
-
         request(debitor, function(err, res, data){
-            //response verwerken
+            
             
             var checkout ={
                 url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/check-outs',
@@ -53,10 +59,6 @@ routes.post('/ticketBestellen', function(req, res) {
             })
         });
     });
-    res.status(200).json({
-            "token":token,
-            "debitor":debitor
-        });
 });
 
 module.exports = routes;
