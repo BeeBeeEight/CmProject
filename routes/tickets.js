@@ -25,22 +25,34 @@ routes.post('/ticketBestellen', function(req, response) {
         var phone_number = req.body.phone_number
         var total_amount = req.body.total_amount
         
-        debitor = {
+        if (phone_number = "undefined"){
+            debitor = {
             url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
             method: 'POST',
             headers: {
                 'Content-Type' : 'application/json',
-                'Authorization': 'bearer' + token
+                'Authorization': 'bearer ' + token
+            },
+            body: '[{"reference": "' + debitor_reference + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
+            }
+        }else{
+            debitor = {
+            url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': 'bearer ' + token
             },
             body: '[{"reference": "' + debitor_reference + '", "phone_number": "' + phone_number + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
+            }
         }
-        console.dir(debitor);
+        /*
         response.status(200).json({
             "token":token,
             "debitor":debitor
         });
-           
-        
+        */
+                
         request(debitor, function(err, res, data){
             
             
@@ -49,13 +61,19 @@ routes.post('/ticketBestellen', function(req, response) {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
-                    'Authorization': 'bearer' + token
+                    'Authorization': 'bearer ' + token
                 },
-                body: ''
+                body: '{ "reference": "'+debitor_reference+'", "currency": "EUR", "locale": "nl-NL", "total_amount": '+ total_amount +'}'
             }
 
             request(checkout, function(err, res, data){
                 //response
+              //  console.dir(data);
+            var result = JSON.parse(data);
+            var checkout_url = result.check_out_url;
+              response.status(200).json(
+                  {"checkout": checkout_url}
+              )
             })
         });
     });
