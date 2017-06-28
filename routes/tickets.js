@@ -25,39 +25,39 @@ routes.post('/ticketBestellen', function(req, response) {
         var phone_number = req.body.phone_number
         var total_amount = req.body.total_amount
         
-        // if (phone_number = "undefined"){
-        //     debitor = {
-        //     url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/json',
-        //         'Authorization': 'bearer ' + token
-        //     },
-        //     body: '[{"reference": "' + debitor_reference + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
-        //     }
-        // }else{
-        //     debitor = {
-        //     url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type' : 'application/json',
-        //         'Authorization': 'bearer ' + token
-        //     },
-        //     body: '[{"reference": "' + debitor_reference + '", "phone_number": "' + phone_number + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
-        //     }
-        // }
-        // /*
-        // response.status(200).json({
-        //     "token":token,
-        //     "debitor":debitor
-        // });
-        // */
+        if (phone_number = "undefined"){
+            debitor = {
+            url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': 'bearer ' + token
+            },
+            body: '[{"reference": "' + debitor_reference + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
+            }
+        }else{
+            debitor = {
+            url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/debtors',
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization': 'bearer ' + token
+            },
+            body: '[{"reference": "' + debitor_reference + '", "phone_number": "' + phone_number + '", "total_amount": '+ total_amount +', "no_direct_debit": true, "currency": "EUR", "locale": "nl-NL",}]'
+            }
+        }
+        /*
+        response.status(200).json({
+            "token":token,
+            "debitor":debitor
+        });
+        */
                 
-        // request(debitor, function(err, res, data){
+        request(debitor, function(err, res, data){
             
             
             var checkout ={
-                url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-D3311306-C7A0-415B-835B-7D07B5508513/check-outs',
+                url : 'https://autocollectapi.cmpayments.com/v1.0/groups/AGR-EBA031C1-625E-42C4-B072-E0E89EBC14D5/check-outs',
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',
@@ -77,6 +77,6 @@ routes.post('/ticketBestellen', function(req, response) {
             })
         });
     });
-// });
+});
 
 module.exports = routes;
